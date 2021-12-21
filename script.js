@@ -7,9 +7,10 @@ var button = document.getElementById("myButton");
 
 button.addEventListener("pointerup", function () {
     document.getElementById("demo").innerHTML = "Hello World";
-    navigator.bluetooth.requestDevice(
-        // { filters: [{ services: ['battery_service'] }] }
-        )
+    navigator.bluetooth.requestDevice({ 
+        acceptAllDevices: true,
+            //filters: [{ services: ['battery_service'] }] 
+        }        )
         .then(device => { /* … */ })
         .catch(error => { console.error(error); });
 });
