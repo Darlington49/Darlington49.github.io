@@ -40,7 +40,8 @@ button.addEventListener("pointerup", function () {
 
     function handleCharacteristicValueChanged(event) {
         const value = event.target.value;
-        console.log('Received ' + value);
+        console.log('Received ');
+        console.log(value);
         // TODO: Parse Heart Rate Measurement value.
         // See https://github.com/WebBluetoothCG/demos/blob/gh-pages/heart-rate-sensor/heartRateSensor.js
     }
