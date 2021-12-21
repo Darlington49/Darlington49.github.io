@@ -21,8 +21,21 @@ button.addEventListener("pointerup", function () {
             // Reading Battery Level…
             return characteristic.readValue();
         })
-        .then(value => {
-            console.log(`Battery percentage is ${value.getUint8(0)}`);
+        .then(characteristic => {
+            // Set up event listener for when characteristic value changes.
+            characteristic.addEventListener('characteristicvaluechanged',
+                handleBatteryLevelChanged);
+            // Reading Battery Level…
+            return characteristic.readValue();
         })
+        .catch(error => { console.error(error); });
+
+    function handleBatteryLevelChanged(event) {
+        const batteryLevel = event.target.value.getUint8(0);
+        console.log('Battery percentage is ' + batteryLevel);
+    }
+        .then(value => {
+        console.log(`Battery percentage is ${value.getUint8(0)}`);
+    })
         .catch(error => { console.error(error); });
 });
