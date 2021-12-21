@@ -7,35 +7,41 @@ var button = document.getElementById("myButton");
 
 button.addEventListener("pointerup", function () {
     document.getElementById("demo").innerHTML = "Hello World";
-    navigator.bluetooth.requestDevice({ filters: [{ services: ['battery_service'] }] })
+    // navigator.bluetooth.requestDevice({ filters: [{ services: ['battery_service'] }] })
+    //     .then(device => device.gatt.connect())
+    //     .then(server => {
+    //         // Getting Battery Service…
+    //         return server.getPrimaryService('battery_service');
+    //     })
+    //     .then(service => {
+    //         // Getting Battery Level Characteristic…
+    //         return service.getCharacteristic('battery_level');
+    //     })
+    //     .then(characteristic => {
+    //         // Reading Battery Level…
+    //         return characteristic.readValue();
+    //     })
+    //     .then(value => {
+    //         console.log(`Battery percentage is ${value.getUint8(0)}`);
+    //     })
+    //     .catch(error => { console.error(error); });
+
+    navigator.bluetooth.requestDevice({ filters: [{ services: ['heart_rate'] }] })
         .then(device => device.gatt.connect())
-        .then(server => {
-            // Getting Battery Service…
-            return server.getPrimaryService('battery_service');
-        })
-        .then(service => {
-            // Getting Battery Level Characteristic…
-            return service.getCharacteristic('battery_level');
-        })
+        .then(server => server.getPrimaryService('heart_rate'))
+        .then(service => service.getCharacteristic('heart_rate_measurement'))
+        .then(characteristic => characteristic.startNotifications())
         .then(characteristic => {
-            // Reading Battery Level…
-            return characteristic.readValue();
-        })
-        .then(characteristic => {
-            // Set up event listener for when characteristic value changes.
             characteristic.addEventListener('characteristicvaluechanged',
-                handleBatteryLevelChanged);
-            // Reading Battery Level…
-            return characteristic.readValue();
+                handleCharacteristicValueChanged);
+            console.log('Notifications have been started.');
         })
         .catch(error => { console.error(error); });
 
-    function handleBatteryLevelChanged(event) {
-        const batteryLevel = event.target.value.getUint8(0);
-        console.log('Battery percentage is ' + batteryLevel);
+    function handleCharacteristicValueChanged(event) {
+        const value = event.target.value;
+        console.log('Received ' + value);
+        // TODO: Parse Heart Rate Measurement value.
+        // See https://github.com/WebBluetoothCG/demos/blob/gh-pages/heart-rate-sensor/heartRateSensor.js
     }
-        .then(value => {
-        console.log(`Battery percentage is ${value.getUint8(0)}`);
-    })
-        .catch(error => { console.error(error); });
 });
